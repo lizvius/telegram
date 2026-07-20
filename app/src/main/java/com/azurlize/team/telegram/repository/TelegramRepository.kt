@@ -289,8 +289,8 @@ class TelegramRepository private constructor() {
 
     fun sendPhoto(chatId: Long, path: String, caption: String = "") {
         Log.i(TAG, "UPLOAD: Sending photo to chat $chatId: $path")
-        val inputPhoto = TdApi.InputPhoto(TdApi.InputFileLocal(path), null, null, null, 0, 0)
-        val content = TdApi.InputMessagePhoto(inputPhoto, TdApi.FormattedText(caption, null), false, null, false)
+        val inputPhoto = TdApi.InputFileLocal(path)
+        val content = TdApi.InputMessagePhoto(inputPhoto, null, null, null, 0, 0, TdApi.FormattedText(caption, null), false, null, false)
         client.send(TdApi.SendMessage(chatId, null, null, null, null, content)) { result ->
             if (result is TdApi.Message) {
                 Log.d(TAG, "UPLOAD: Photo sent successfully, id: ${result.id}")
@@ -302,8 +302,8 @@ class TelegramRepository private constructor() {
 
     fun sendVideo(chatId: Long, path: String, caption: String = "") {
         Log.i(TAG, "UPLOAD: Sending video to chat $chatId: $path")
-        val inputVideo = TdApi.InputVideo(TdApi.InputFileLocal(path), null, null, 0, null, 0, 0, 0, true)
-        val content = TdApi.InputMessageVideo(inputVideo, TdApi.FormattedText(caption, null), false, null, false)
+        val inputVideo = TdApi.InputFileLocal(path)
+        val content = TdApi.InputMessageVideo(inputVideo, null, null, 0, null, 0, 0, 0, true, TdApi.FormattedText(caption, null), false, null, false)
         client.send(TdApi.SendMessage(chatId, null, null, null, null, content)) { result ->
             if (result is TdApi.Message) {
                 Log.d(TAG, "UPLOAD: Video sent successfully, id: ${result.id}")
@@ -315,8 +315,8 @@ class TelegramRepository private constructor() {
 
     fun sendDocument(chatId: Long, path: String, caption: String = "") {
         Log.i(TAG, "UPLOAD: Sending document to chat $chatId: $path")
-        val inputDoc = TdApi.InputDocument(TdApi.InputFileLocal(path), null, false)
-        val content = TdApi.InputMessageDocument(inputDoc, TdApi.FormattedText(caption, null))
+        val inputDoc = TdApi.InputFileLocal(path)
+        val content = TdApi.InputMessageDocument(inputDoc, null, false, TdApi.FormattedText(caption, null))
         client.send(TdApi.SendMessage(chatId, null, null, null, null, content)) { result ->
             if (result is TdApi.Message) {
                 Log.d(TAG, "UPLOAD: Document sent successfully, id: ${result.id}")
@@ -328,8 +328,8 @@ class TelegramRepository private constructor() {
 
     fun sendAudio(chatId: Long, path: String, caption: String = "") {
         Log.i(TAG, "UPLOAD: Sending audio to chat $chatId: $path")
-        val inputAudio = TdApi.InputAudio(TdApi.InputFileLocal(path), null, 0, "", "")
-        val content = TdApi.InputMessageAudio(inputAudio, TdApi.FormattedText(caption, null))
+        val inputAudio = TdApi.InputFileLocal(path)
+        val content = TdApi.InputMessageAudio(inputAudio, null, 0, "", "", TdApi.FormattedText(caption, null))
         client.send(TdApi.SendMessage(chatId, null, null, null, null, content)) { result ->
             if (result is TdApi.Message) {
                 Log.d(TAG, "UPLOAD: Audio sent successfully, id: ${result.id}")
@@ -341,8 +341,8 @@ class TelegramRepository private constructor() {
 
     fun sendVoiceNote(chatId: Long, path: String, caption: String = "") {
         Log.i(TAG, "UPLOAD: Sending voice note to chat $chatId: $path")
-        val inputVoice = TdApi.InputVoiceNote(TdApi.InputFileLocal(path), 0, null)
-        val content = TdApi.InputMessageVoiceNote(inputVoice, TdApi.FormattedText(caption, null), null)
+        val inputVoice = TdApi.InputFileLocal(path)
+        val content = TdApi.InputMessageVoiceNote(inputVoice, 0, null, TdApi.FormattedText(caption, null), null)
         client.send(TdApi.SendMessage(chatId, null, null, null, null, content)) { result ->
             if (result is TdApi.Message) {
                 Log.d(TAG, "UPLOAD: Voice note sent successfully, id: ${result.id}")
@@ -442,7 +442,7 @@ class TelegramRepository private constructor() {
 
     fun searchChats(query: String, callback: (List<TdApi.Chat>) -> Unit) {
         Log.d(TAG, "SEARCH: Searching chats with query: $query")
-        client.send(TdApi.SearchChats(query, null, 20)) { result ->
+        client.send(TdApi.SearchChats(query, 20)) { result ->
             if (result is TdApi.Chats) {
                 val chats = result.chatIds.toList().mapNotNull { chatMap[it] }
                 callback(chats)

@@ -41,8 +41,8 @@ class ChatAdapter(
             // Last Message or Draft
             val draftMessage = chat.draftMessage
             if (draftMessage != null) {
-                val draftText = when (val content = draftMessage.content) {
-                    is TdApi.DraftMessageContentText -> content.text.text
+                val draftText = when (val content = draftMessage.inputMessageText) {
+                    is TdApi.InputMessageText -> content.text.text
                     else -> "Draft"
                 }
                 binding.tvLastMessage.text = "Draft: $draftText"
