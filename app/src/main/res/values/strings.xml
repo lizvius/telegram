@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">AzurLize</string>
+    
+    <!-- Splash Screen -->
+    <string name="splash_title">AZURLIZE</string>
+    <string name="splash_subtitle">Secure Client Platform</string>
+    <string name="splash_status_init">Initializing TDLib Security Core…</string>
+    <string name="splash_status_check">Checking Session Status…</string>
+    <string name="splash_status_ready">System Ready</string>
+
+    <!-- Login Screen -->
+    <string name="login_welcome">Welcome to AzurLize</string>
+    <string name="login_desc">Please enter your phone number in international format to connect to TDLib</string>
+    <string name="login_phone_label">Phone Number</string>
+    <string name="login_phone_placeholder">+6281234567890</string>
+    <string name="login_btn_continue">Continue</string>
+    <string name="login_error_invalid_phone">Please enter a valid phone number (minimum 10 digits and starts with +)</string>
+
+    <!-- OTP Screen -->
+    <string name="otp_title">Verification</string>
+    <string name="otp_desc">We have sent an authentication code to %1$s via official Telegram channels.</string>
+    <string name="otp_wrong_number">Wrong number? Edit</string>
+    <string name="otp_code_label">Verification Code</string>
+    <string name="otp_code_placeholder">123456</string>
+    <string name="otp_btn_verify">Verify Code</string>
+    <string name="otp_btn_resend">Resend Code</string>
+    <string name="otp_btn_resend_waiting">Resend in %1$ds</string>
+    <string name="otp_2fa_title">Two-Step Verification</string>
+    <string name="otp_2fa_desc">Your account has cloud password protection active. Please enter your 2FA password to complete sign-in.</string>
+    <string name="otp_password_hint">Cloud Password</string>
+    <string name="otp_btn_submit_password">Submit Password</string>
+    <string name="otp_error_empty_code">Verification code cannot be empty</string>
+    <string name="otp_error_invalid_code_length">Verification code must be 5 or 6 digits</string>
+    <string name="otp_error_empty_password">Password cannot be empty</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Dashboard</string>
+    <string name="home_welcome">Secure Session Established</string>
+    <string name="home_user_id">Telegram User ID</string>
+    <string name="home_phone">Phone Number</string>
+    <string name="home_username">Username</string>
+    <string name="home_first_name">First Name</string>
+    <string name="home_last_name">Last Name</string>
+    <string name="home_btn_logout">Terminate Session</string>
+</resources>

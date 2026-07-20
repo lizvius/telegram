@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back_arrow"
+            app:title="Settings" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- Chat Settings -->
+            <TextView style="@style/SettingsHeader" android:text="Settings" />
+            
+            <include layout="@layout/item_settings_option" android:id="@+id/option_notifications" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_privacy" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_storage" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_chat_settings" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_appearance" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_devices" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_language" />
+
+            <View style="@style/SettingsDivider" />
+
+            <!-- Support -->
+            <TextView style="@style/SettingsHeader" android:text="Support" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_ask_question" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_telegram_faq" />
+            <include layout="@layout/item_settings_option" android:id="@+id/option_privacy_policy" />
+
+            <View style="@style/SettingsDivider" />
+
+            <include layout="@layout/item_settings_option" android:id="@+id/option_about" />
+
+            <View style="@style/SettingsDivider" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_logout"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:text="Logout"
+                android:textColor="?attr/colorError"
+                app:icon="@drawable/ic_logout"
+                app:iconTint="?attr/colorError" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
