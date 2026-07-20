@@ -24,8 +24,8 @@ jobs:
 
       - name: Clean and Repair Gradle Wrapper
         run: |
-          mkdir -p gradle/wrapper
-          curl -sLo gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v8.11.1/gradle/wrapper/gradle-wrapper.jar
+          rm -f gradle/wrapper/gradle-wrapper.jar
+          gradle wrapper
           sed -i 's/\r$//' gradlew
           chmod +x gradlew
 
