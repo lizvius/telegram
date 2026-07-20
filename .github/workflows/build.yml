@@ -42,8 +42,13 @@ jobs:
             echo "No debug.keystore.base64 found, Gradle will auto-generate one if needed."
           fi
 
-      - name: Grant Execute Permission to Gradlew
-        run: chmod +x gradlew
+      - name: Regenerate Gradle Wrapper
+        run: gradle wrapper
+
+      - name: Make Gradlew Executable and Normalize Line Endings
+        run: |
+          sed -i 's/\r$//' gradlew
+          chmod +x gradlew
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon

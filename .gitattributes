@@ -1,0 +1,21 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Common image formats are binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+
+# Android/Java binary files
+*.jar binary
+*.class binary
+*.keystore binary
+*.aar binary
+*.apk binary
+*.so binary
+
+# Executables and script files
+gradlew text eol=lf
+*.sh text eol=lf
