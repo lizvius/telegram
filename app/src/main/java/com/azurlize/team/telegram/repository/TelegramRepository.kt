@@ -505,13 +505,21 @@ class TelegramRepository private constructor() {
     fun getBasicGroup(basicGroupId: Long): TdApi.BasicGroup? = basicGroupMap[basicGroupId]
     fun getFile(fileId: Int): TdApi.File? = fileMap[fileId]
 
+    fun openChat(chatId: Long) {
+        Log.d(TAG, "CHAT: Opening chat $chatId")
+        client.send(TdApi.OpenChat(chatId)) { result ->
+            if (result !is TdApi.Ok) {
+                Log.e(TAG, "CHAT: Error opening chat $chatId: $result")
+            }
+        }
+    }
+
     fun setName(firstName: String, lastName: String, callback: (Boolean) -> Unit) {
         Log.d(TAG, "USER: Setting name to $firstName $lastName")
         client.send(TdApi.SetName(firstName, lastName)) { result ->
             callback(result is TdApi.Ok)
         }
     }
-
     fun setBio(bio: String, callback: (Boolean) -> Unit) {
         Log.d(TAG, "USER: Setting bio to $bio")
         client.send(TdApi.SetBio(bio)) { result ->
@@ -655,6 +663,25 @@ class TelegramRepository private constructor() {
                 callback(newMessages)
             } else {
                 Log.e(TAG, "FORUM: Error getting topic history: $result")
+                callback(emptyList())
+            }
+        }
+    }
+
+    fun getChatHistory(chatId: Long, fromMessageId: Long = 0, limit: Int = 50, callback: (List<TdApi.Message>) -> Unit = {}) {
+        Log.d(TAG, "CHAT: Getting history for chat $chatId from message $fromMessageId")
+        client.send(TdApi.GetChatHistory(chatId, fromMessageId, 0, limit, false)) { result ->
+            if (result is TdApi.Messages) {
+                val newMessages = result.messages.toList()
+                val currentMessages = _messages.value[chatId] ?: emptyList()
+                val combined = (currentMessages + newMessages)
+                    .distinctBy { it.id }
+                    .sortedByDescending { it.date }
+                _messages.value = _messages.value + (chatId to combined)
+                
+                callback(newMessages)
+            } else {
+                Log.e(TAG, "CHAT: Error getting chat history: $result")
                 callback(emptyList())
             }
         }

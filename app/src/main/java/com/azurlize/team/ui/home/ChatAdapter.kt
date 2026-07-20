@@ -87,6 +87,9 @@ class ChatAdapter(
                 is TdApi.ChatTypeSupergroup -> {
                     val supergroup = getSupergroup(type.supergroupId)
                     isVerified = supergroup?.verificationStatus?.isVerified ?: false
+                    // Detect if it is a forum
+                    val isForum = supergroup?.isForum ?: false
+                    binding.ivForum.visibility = if (isForum) View.VISIBLE else View.GONE
                 }
             }
             

@@ -55,23 +55,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupTabLayout() {
-        binding.tabLayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
-                val category = when (tab?.position) {
-                    1 -> HomeViewModel.ChatCategory.PERSONAL
-                    2 -> HomeViewModel.ChatCategory.GROUPS
-                    3 -> HomeViewModel.ChatCategory.CHANNELS
-                    else -> HomeViewModel.ChatCategory.ALL
-                }
-                viewModel.setCategory(category)
-            }
-
-            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
-            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
-        })
-    }
-
     private fun setupRecyclerView() {
         chatAdapter = ChatAdapter(
             onChatClick = { chat ->
@@ -198,6 +181,33 @@ class HomeFragment : Fragment() {
             is TdApi.ConnectionStateReady -> "Online"
             else -> "Offline"
         }
+    }
+
+    private fun setupTabLayout() {
+        binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_person)
+        binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_chat)
+        binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_dashboard)
+        binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.ic_notifications)
+        binding.tabLayout.getTabAt(4)?.setIcon(R.drawable.ic_info)
+        binding.tabLayout.getTabAt(5)?.setIcon(R.drawable.ic_storage)
+
+        binding.tabLayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
+                val category = when (tab?.position) {
+                    0 -> HomeViewModel.ChatCategory.PERSONAL
+                    1 -> HomeViewModel.ChatCategory.CONTACTS
+                    2 -> HomeViewModel.ChatCategory.GROUPS
+                    3 -> HomeViewModel.ChatCategory.CHANNELS
+                    4 -> HomeViewModel.ChatCategory.BOTS
+                    5 -> HomeViewModel.ChatCategory.ARCHIVE
+                    else -> HomeViewModel.ChatCategory.PERSONAL
+                }
+                viewModel.setCategory(category)
+            }
+
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+        })
     }
 
     override fun onDestroyView() {

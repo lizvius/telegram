@@ -13,15 +13,16 @@ import org.drinkless.tdlib.TdApi
 class HomeViewModel : ViewModel() {
     private val repository = TelegramRepository.getInstance()
 
-    enum class ChatCategory { ALL, PERSONAL, GROUPS, CHANNELS }
+    enum class ChatCategory { PERSONAL, CONTACTS, GROUPS, CHANNELS, BOTS, ARCHIVE }
 
-    private val _currentCategory = MutableStateFlow(ChatCategory.ALL)
+    private val _currentCategory = MutableStateFlow(ChatCategory.PERSONAL)
     val currentCategory: StateFlow<ChatCategory> = _currentCategory.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val chats: StateFlow<List<TdApi.Chat>> = repository.chats
+    val contacts: StateFlow<List<TdApi.User>> = repository.contacts
     val connectionState: StateFlow<TdApi.ConnectionState> = repository.connectionState
     val me: StateFlow<TdApi.User?> = repository.me
     val fileUpdates: StateFlow<TdApi.File?> = repository.fileUpdates
@@ -31,10 +32,17 @@ class HomeViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            combine(chats, searchQuery, _currentCategory) { chatList, query, category ->
+            combine(chats, searchQuery, _currentCategory, contacts) { chatList, query, category, contactList ->
                 val filteredByCategory = when (category) {
-                    ChatCategory.ALL -> chatList
-                    ChatCategory.PERSONAL -> chatList.filter { it.type is TdApi.ChatTypePrivate }
+                    ChatCategory.PERSONAL -> chatList.filter { 
+                        it.type is TdApi.ChatTypePrivate && 
+                        repository.getUser((it.type as TdApi.ChatTypePrivate).userId)?.type !is TdApi.UserTypeBot &&
+                        contactList.none { contact -> contact.id == (it.type as TdApi.ChatTypePrivate).userId }
+                    }
+                    ChatCategory.CONTACTS -> chatList.filter { 
+                        it.type is TdApi.ChatTypePrivate && 
+                        contactList.any { contact -> contact.id == (it.type as TdApi.ChatTypePrivate).userId }
+                    }
                     ChatCategory.GROUPS -> chatList.filter { chat ->
                         when (val type = chat.type) {
                             is TdApi.ChatTypeBasicGroup -> true
@@ -48,6 +56,16 @@ class HomeViewModel : ViewModel() {
                             else -> false
                         }
                     }
+                    ChatCategory.BOTS -> chatList.filter { chat ->
+                        when (val type = chat.type) {
+                            is TdApi.ChatTypePrivate -> {
+                                val user = repository.getUser(type.userId)
+                                user?.type is TdApi.UserTypeBot
+                            }
+                            else -> false
+                        }
+                    }
+                    ChatCategory.ARCHIVE -> chatList.filter { false } // TODO: Implement archive
                 }
 
                 if (query.isEmpty()) {

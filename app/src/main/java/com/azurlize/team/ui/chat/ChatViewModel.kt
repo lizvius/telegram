@@ -2,6 +2,7 @@ package com.azurlize.team.ui.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.util.Log
 import com.azurlize.team.telegram.repository.TelegramRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,21 +41,37 @@ class ChatViewModel : ViewModel() {
     val me = repository.me
     val connectionState = repository.connectionState
 
+    private var messageCollectionJob: kotlinx.coroutines.Job? = null
+
+    init {
+        viewModelScope.launch {
+            repository.connectionState.collect { state ->
+                if (state is TdApi.ConnectionStateReady) {
+                    loadMessages()
+                }
+            }
+        }
+    }
+
     fun setChatId(chatId: Long, topicId: Int = 0) {
         currentChatId = chatId
         currentTopicId = topicId
         repository.getChat(chatId) {
             _chat.value = it
         }
+        repository.openChat(chatId)
+        
+        messageCollectionJob?.cancel()
+        
+        loadMessages()
         if (topicId == 0) {
-            viewModelScope.launch {
+            messageCollectionJob = viewModelScope.launch {
                 repository.messages.collect { map ->
                     _messagesList.value = map[chatId] ?: emptyList()
                 }
             }
         } else {
-            loadMessages()
-            viewModelScope.launch {
+            messageCollectionJob = viewModelScope.launch {
                 repository.messages.collect { map ->
                     val chatMsgs = map[chatId] ?: emptyList()
                     _messagesList.value = chatMsgs.filter { msg ->

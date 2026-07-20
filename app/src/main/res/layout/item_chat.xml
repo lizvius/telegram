@@ -129,6 +129,16 @@
             tools:visibility="visible" />
 
         <ImageView
+            android:id="@+id/iv_forum"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_chat"
+            android:tint="?attr/colorOnSurfaceVariant"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
             android:id="@+id/iv_pinned"
             android:layout_width="16dp"
             android:layout_height="16dp"
@@ -156,5 +166,13 @@
             tools:visibility="visible" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@id/cv_avatar"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="80dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
